@@ -7,14 +7,12 @@ var currentImgPath = 'images/' + randomInt(18) + '.png';
 var textTop = document.getElementById('textTop');
 var textBottom = document.getElementById('textBottom');
 
-function resizeCanvas()
-{
+function resizeCanvas() {
     canvas.width = image.width;
     canvas.height = image.height;
 }
 
-function drawText(text, y)
-{
+function drawText(text, y) {
     context.textAlign = 'center';
     context.font = '30px Impact';
     context.strokeStyle = 'black';
@@ -27,8 +25,7 @@ function drawText(text, y)
     //console.log('Size text', context.measureText(text).width);
 }
 
-function drawImage(path)
-{
+function drawImage(path) {
     image.onload = function() {
         resizeCanvas();
         context.drawImage(image, 0, 0, canvas.width, canvas.height);
@@ -36,8 +33,7 @@ function drawImage(path)
     image.src = path;
 }
 
-function clearCanvas()
-{
+function clearCanvas() {
     context.clearRect(0, 0, canvas.width, canvas.height);
 }
 
@@ -48,6 +44,15 @@ function renderText() {
     drawText(textBottom.value.toUpperCase(), canvas.height-30);
 }
 
+function downloadCanvas(link, filename) {
+    link.href = canvas.toDataURL();
+    link.download = filename;
+}
+
 $('.form-control').on('keyup', renderText);
+
+$('#download').on('click', function () {
+    downloadCanvas(this, filenameGenerate());
+});
 
 drawImage(currentImgPath);
