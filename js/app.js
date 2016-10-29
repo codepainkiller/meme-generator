@@ -2,7 +2,7 @@ var canvas = document.getElementById('canvas');
 var context = canvas.getContext('2d');
 
 var image = new Image();
-var currentImgPath = 'images/' + randomInt(18) + '.png';
+var currentImgPath = 'images/5.png';
 
 var textTop = document.getElementById('textTop');
 var textBottom = document.getElementById('textBottom');
@@ -25,16 +25,13 @@ function drawText(text, y) {
     //console.log('Size text', context.measureText(text).width);
 }
 
-function drawImage(path) {
+function renderImage(path) {
     image.onload = function() {
         resizeCanvas();
         context.drawImage(image, 0, 0, canvas.width, canvas.height);
+        renderText();
     };
     image.src = path;
-}
-
-function clearCanvas() {
-    context.clearRect(0, 0, canvas.width, canvas.height);
 }
 
 function renderText() {
@@ -44,10 +41,28 @@ function renderText() {
     drawText(textBottom.value.toUpperCase(), canvas.height-30);
 }
 
+function clearCanvas() {
+    context.clearRect(0, 0, canvas.width, canvas.height);
+}
+
 function downloadCanvas(link, filename) {
     link.href = canvas.toDataURL();
     link.download = filename;
 }
+
+function generateGallery() {
+    var html = '';
+
+    for (var i = 0; i <= 20; i++) {
+        html += '<img src="images/' + i +'.png" data-id="' + i + '" class="img-gallery">';
+    }
+
+    $('#gallery').append(html);
+}
+
+
+renderImage(currentImgPath);
+generateGallery();
 
 $('.form-control').on('keyup', renderText);
 
@@ -55,4 +70,7 @@ $('#download').on('click', function () {
     downloadCanvas(this, filenameGenerate());
 });
 
-drawImage(currentImgPath);
+$('#gallery').on('click', '.img-gallery', function () {
+    currentImgPath = 'images/' + $(this).data('id') + '.png';
+    renderImage(currentImgPath);
+});
